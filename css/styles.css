@@ -1,12 +1,5 @@
-@font-face
-{
-  font-family: 'myFancyFont';
-  src: url('fonts/SCRIPTIN.ttf');
-}
-
-div.scroll {
-    background-color: #FFFFFF;
-    height:225px;
-    width: 100%;
-    overflow-x: scroll;
+img {
+  width: 400px;
+  display: block;
+  margin: 0 auto;
 }
