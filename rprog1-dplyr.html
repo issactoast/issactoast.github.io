@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>dplyr 주요 동사 5가지에 대하여</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Anyone Can Learn Anything</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About Me</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Say Hello to Me
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="https://www.facebook.com/profile.php?id=100004926046045">
+        <span class="fa fa-facebook"></span>
+         
+        Facebook page
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/issactoast">
+        <span class="fa fa-github"></span>
+         
+        Github page
+      </a>
+    </li>
+    <li>
+      <a href="mailto:sak-lee@uiowa.edu">
+        <span class="fa fa-envelope"></span>
+         
+        Mail to Me
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><code>dplyr</code> 주요 동사 5가지에 대하여</h1>
+
+</div>
+
+
+<p>[참고] 이 포스팅은 Hadley Wickham &amp; Garrett Grolemund의 <a href="http://r4ds.had.co.nz/transform.html">R for Data Science</a>책의 챕터 5장을 개인적으로 중요한 내용을 뽑아내어 재구성한 포스팅입니다.</p>
+<p>이 포스팅에 사용되는 라이브러리는 다음과 같다.</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<div id="-" class="section level3">
+<h3>데이터 만들기</h3>
+<p>함수가 어떻게 작동하는지 알아보기 위해서 작은 데이터 셋을 만들어 보자.</p>
+<pre class="r"><code>set.seed(123)
+mydata &lt;- data_frame(소속학급 = sample(3, 10, replace = TRUE),
+                     학생번호 = sample(30, 10, replace = TRUE),
+                     중간고사 = as.integer(rnorm(10, mean = 80, sd = 5)),
+                     기말고사 = as.integer(rnorm(10, mean = 70, sd = 7)))
+mydata</code></pre>
+<pre><code>## # A tibble: 10 × 4
+##    소속학급 학생번호 중간고사 기말고사
+##       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1         1       29       86       62
+## 2         3       14       81       68
+## 3         2       21       82       62
+## 4         3       18       80       64
+## 5         3        4       77       65
+## 6         1       27       88       58
+## 7         2        8       82       75
+## 8         3        2       70       71
+## 9         2       10       83       62
+## 10        2       29       77       78</code></pre>
+<p>위의 데이터는 한 반이 30명으로 이루어진 3개의 학급에서 임으로 10명의 학생들의 성적을 기록한 데이터라고 생각하자. 데이터의 첫번째 열은 학급, 두번째 열은 학생의 학급 번호, 마지막 두 열에는 학생의 중간고사과 기말고사 성적이 기록되어 있다.</p>
+<ul>
+<li>이번 챕터에서 배울 함수의 종류는 다음과 같다.</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><code>filter()</code> : 특정 조건을 만족하는 데이터를 필터링 - 가로행( 관측값) 기준으로 결과 값이 나옴</li>
+<li><code>arrange()</code> : 데이터 정렬에 사용</li>
+<li><code>select()</code> : 특정 열(variable)을 선택.</li>
+<li><code>mutate()</code> : 기존의 변수(열)를 가지고 새로운 칼럼(column)을 생성.</li>
+<li><code>summarize()</code> : 열 전체를 입력값으로 한 함수를 통하여 새로운 데이터를 생성.</li>
+</ol>
+</div>
+<div id="filter----" class="section level3">
+<h3>1. <code>filter()</code> 함수를 이용한 데이터 필터링</h3>
+<p>1반에 속한 학생들만 필터링 하고싶을 때는 다음과 같이 할 수 있다.</p>
+<pre class="r"><code>filter(mydata, 소속학급 == 1)</code></pre>
+<pre><code>## # A tibble: 2 × 4
+##   소속학급 학생번호 중간고사 기말고사
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        1       29       86       62
+## 2        1       27       88       58</code></pre>
+<p>조건이 여러 개일 경우는 다음과 같이 쉼표로 뒤에 이어서 써주면 된다. 다음은 1반 학생 중 번호가 10번 인 학생을 필터링하는 방법이다. 이렇게 쉼표로 이어서 쓰면 한국어로 ’그리고’를 의미하는 논리 필터임.</p>
+<pre class="r"><code>filter(mydata, 소속학급 == 1, 학생번호 == 27)</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   소속학급 학생번호 중간고사 기말고사
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        1       27       88       58</code></pre>
+<p>그렇다면 여러개의 조건 중 하나만 만족해도 참인 ’이거나’의 경우는 어떻게 구현할까? 이 경우 곧 배우게 될 논리 오퍼레이터인 <code>|</code>를 사용하여 구현할 수 도 있지만, 먼저 <code>%in%</code> 명령어를 사용하여 구현하는 방법을 배워보자. 다음은 3개의 반 중 1반에 속하거나 2반에 속하는 학생들의 데이터를 필터하는 방법이다.</p>
+<pre class="r"><code>filter( mydata, 소속학급 %in% c(1,2) )</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##   소속학급 학생번호 중간고사 기말고사
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        1       29       86       62
+## 2        2       21       82       62
+## 3        1       27       88       58
+## 4        2        8       82       75
+## 5        2       10       83       62
+## 6        2       29       77       78</code></pre>
+<p>앞에서 배운 위의 두 코드를 응용하면 ’그리고’과 ’이거나’가 함께 들어간 필터링도 생성가능하다.</p>
+<pre class="r"><code>filter(mydata, 소속학급 %in% c(1, 2), 중간고사 == 82)</code></pre>
+<pre><code>## # A tibble: 2 × 4
+##   소속학급 학생번호 중간고사 기말고사
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        2       21       82       62
+## 2        2        8       82       75</code></pre>
+<p>다음은 R에서 사용되는 논리 연산자들이다.</p>
+<ul>
+<li>논리 연산자(Logical operators) 목록</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><code>&amp;</code> : 그리고</li>
+<li><code>|</code> : 이거나</li>
+<li><code>!</code> : 부정</li>
+<li><code>xor</code> : 같지 않은</li>
+<li><code>&gt;</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;=</code> : 관계를 나타내는 표현들</li>
+</ol>
+<p>바로 앞에서 사용한 코드를 논리 연산자를 사용해서 나타내어 보면 다음과 같다.</p>
+<pre class="r"><code>filter( mydata, ((소속학급 == 1) | (소속학급 == 2)) &amp; 중간고사 == 82 )</code></pre>
+<div id="-" class="section level4">
+<h4>응용 코드</h4>
+<p>이제까지 배운 코드를 이용하면 다음과 같은 복잡한 필터링이 가능하다.</p>
+<pre class="r"><code>filter(mydata,  소속학급  %in% c(1, 3),
+      (중간고사 &gt; 60 &amp; 중간고사 &lt; 80), 
+      (기말고사 &lt; 70 | 기말고사 &gt; 90))</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   소속학급 학생번호 중간고사 기말고사
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        3        4       77       65</code></pre>
+<p>위 코드는 1반과 3반에 속한 학생들 중에서 중간고사 성적이 60점에서 80점 사이이면서 기말고사는 70점 아래이거나 90점 이상을 맞은 학생을 걸러내는 코드로 해석할 수 있다.</p>
+</div>
+</div>
+<div id="arrange--" class="section level3">
+<h3>2. <code>arrange()</code>를 사용하여 정렬하기</h3>
+<p>앞에서 배운 필터링의 결과값은 아래와 같이 정렬이 되지 않는 상태로 나왔다.</p>
+<pre class="r"><code>filter( mydata, 소속학급 %in% c(1,3) )</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##   소속학급 학생번호 중간고사 기말고사
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        1       29       86       62
+## 2        3       14       81       68
+## 3        3       18       80       64
+## 4        3        4       77       65
+## 5        1       27       88       58
+## 6        3        2       70       71</code></pre>
+<p>이 결과값을 좀 더 보기 좋게 바꾸기 위해서는 <code>arrange()</code> 함수의 기능을 알아야 한다. 다음의 코드는 위의 결과값을 저장한 후 학급순으로 정렬하는 코드이다.</p>
+<pre class="r"><code>class1or3 &lt;- filter( mydata, 소속학급 %in% c(1,3) )
+arrange(class1or3, 소속학급)</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##   소속학급 학생번호 중간고사 기말고사
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        1       29       86       62
+## 2        1       27       88       58
+## 3        3       14       81       68
+## 4        3       18       80       64
+## 5        3        4       77       65
+## 6        3        2       70       71</code></pre>
+<p>만약 학급별 정렬후 같은반 학생들끼리 학생번호가 작은 순부터 다시 정렬하고 싶다면, 두번째 정렬기준을 추가해 주면 된다.</p>
+<pre class="r"><code>arrange(class1or3, 소속학급, 학생번호)</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##   소속학급 학생번호 중간고사 기말고사
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        1       27       88       58
+## 2        1       29       86       62
+## 3        3        2       70       71
+## 4        3        4       77       65
+## 5        3       14       81       68
+## 6        3       18       80       64</code></pre>
+<p>추가적으로 만약 소속학급은 오름차순 정렬이지만 중간고사 성적의 경우는 내림차순으로 정렬하고 싶을때는 <code>desc()</code>함수를 사용하도록 하자.</p>
+<pre class="r"><code>arrange(class1or3, 소속학급, desc(중간고사))</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##   소속학급 학생번호 중간고사 기말고사
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        1       27       88       58
+## 2        1       29       86       62
+## 3        3       14       81       68
+## 4        3       18       80       64
+## 5        3        4       77       65
+## 6        3        2       70       71</code></pre>
+</div>
+<div id="select--subdataframe-" class="section level3">
+<h3>3. <code>select()</code>를 사용한 subdataframe 만들기</h3>
+<p><code>select()</code> 함수는 주어진 데이터의 세로열을 선택하는데에 사용되는 함수이다. 데이터에 따라서 열의 개수가 천개가 넘어가는 경우, <code>select()</code> 함수를 사용하여 선택하는 방법이 유용할 것이다. 다음의 코드를 참고하여, 함수의 사용법을 알아보도록 하자.</p>
+<pre class="r"><code>select(mydata, 중간고사, 기말고사)</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##    중간고사 기말고사
+##       &lt;int&gt;    &lt;int&gt;
+## 1        86       62
+## 2        81       68
+## 3        82       62
+## 4        80       64
+## 5        77       65
+## 6        88       58
+## 7        82       75
+## 8        70       71
+## 9        83       62
+## 10       77       78</code></pre>
+<p>위의 코드는 반과 학생의 번호없이 주어진 <code>mydata</code>의 성적만을 선택하였다. 다음과 같이 ‘학생번호’ 열에서부터 ’기말고사’열까지 한꺼번에 선택할 수 도 있다.</p>
+<pre class="r"><code>select(mydata, 학생번호:기말고사)</code></pre>
+<pre><code>## # A tibble: 10 × 3
+##    학생번호 중간고사 기말고사
+##       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        29       86       62
+## 2        14       81       68
+## 3        21       82       62
+## 4        18       80       64
+## 5         4       77       65
+## 6        27       88       58
+## 7         8       82       75
+## 8         2       70       71
+## 9        10       83       62
+## 10       29       77       78</code></pre>
+<p>또, ‘학생번호’ 열만을 제외하고 선택하는 방법은 다음과 같다.</p>
+<pre class="r"><code>select(mydata, -학생번호)</code></pre>
+<pre><code>## # A tibble: 10 × 3
+##    소속학급 중간고사 기말고사
+##       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1         1       86       62
+## 2         3       81       68
+## 3         2       82       62
+## 4         3       80       64
+## 5         3       77       65
+## 6         1       88       58
+## 7         2       82       75
+## 8         3       70       71
+## 9         2       83       62
+## 10        2       77       78</code></pre>
+<p><code>select()</code> 함수에는 부가 함수들이 있는데, 이 함수들은 행이름을 기준으로 조건을 걸어서 선택할 수 있도록 해준다. 예를 들어, 주어진 데이터에서 행이름이 ’고사’로 끝나는 행들만을 선택하려면 다음과 같이 하면 된다. 좀 더 자세한 정보는 <code>?select</code>를 사용하여 도움말을 읽어보도록 하자.</p>
+<pre class="r"><code>select(mydata, ends_with(&quot;고사&quot;))</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##    중간고사 기말고사
+##       &lt;int&gt;    &lt;int&gt;
+## 1        86       62
+## 2        81       68
+## 3        82       62
+## 4        80       64
+## 5        77       65
+## 6        88       58
+## 7        82       75
+## 8        70       71
+## 9        83       62
+## 10       77       78</code></pre>
+<div id="------with-rename-everything" class="section level4">
+<h4>열 이름 바꾸기와 열 순서 변경 with <code>rename()</code>, <code>everything()</code></h4>
+<p>기말고사 열의 이름을 중간고사2로 변경하기 위해서는 다음과 같이 <code>rename()</code> 함수를 사용하자. 주의할 점은 바꾸고 싶은 열의 이름을 오른쪽에 새롭게 부여할 이름을 왼쪽에 적는다. ’중간고사2’라는 새로운 열이름을 생성한 후 기존에 있는 열을 새로운 열에 넣는다는 의미로 받아드리면 될 것이다.</p>
+<pre class="r"><code>rename(mydata, 중간고사2 = 기말고사)</code></pre>
+<pre><code>## # A tibble: 10 × 4
+##    소속학급 학생번호 중간고사 중간고사2
+##       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;     &lt;int&gt;
+## 1         1       29       86        62
+## 2         3       14       81        68
+## 3         2       21       82        62
+## 4         3       18       80        64
+## 5         3        4       77        65
+## 6         1       27       88        58
+## 7         2        8       82        75
+## 8         3        2       70        71
+## 9         2       10       83        62
+## 10        2       29       77        78</code></pre>
+<p>다음은 열의 순서를 바꾸는 방법에 대하여 알아보자. 성적을 먼저 배치하고 소속학급과 번호를 나중에 배치하기 위해서 다음과 같이 하 수 있다.</p>
+<pre class="r"><code>select(mydata, 중간고사, 기말고사, everything())</code></pre>
+<pre><code>## # A tibble: 10 × 4
+##    중간고사 기말고사 소속학급 학생번호
+##       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1        86       62        1       29
+## 2        81       68        3       14
+## 3        82       62        2       21
+## 4        80       64        3       18
+## 5        77       65        3        4
+## 6        88       58        1       27
+## 7        82       75        2        8
+## 8        70       71        3        2
+## 9        83       62        2       10
+## 10       77       78        2       29</code></pre>
+</div>
+</div>
+<div id="mutate----" class="section level3">
+<h3>4. <code>mutate()</code>를 이용하여 새로운 열 만들기</h3>
+<p>주어진 학생 성적 데이터에 마지막 열에 중간고사와 기말고사의 성적을 합하여 ‘합계’ 열을 만들어 보도록 하자.</p>
+<pre class="r"><code>mutate(mydata, 합계 = 중간고사 + 기말고사)</code></pre>
+<pre><code>## # A tibble: 10 × 5
+##    소속학급 학생번호 중간고사 기말고사  합계
+##       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;
+## 1         1       29       86       62   148
+## 2         3       14       81       68   149
+## 3         2       21       82       62   144
+## 4         3       18       80       64   144
+## 5         3        4       77       65   142
+## 6         1       27       88       58   146
+## 7         2        8       82       75   157
+## 8         3        2       70       71   141
+## 9         2       10       83       62   145
+## 10        2       29       77       78   155</code></pre>
+<p>다음과 같이 <code>mutate()</code>함수는 명령어 안에서 새로만든 열을 다음 열을 만드는 데에 사용할 수 있다.</p>
+<pre class="r"><code>mutate(mydata, 합계 = 중간고사 + 기말고사,
+               평균 = 합계 / 2)</code></pre>
+<pre><code>## # A tibble: 10 × 6
+##    소속학급 학생번호 중간고사 기말고사  합계  평균
+##       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+## 1         1       29       86       62   148  74.0
+## 2         3       14       81       68   149  74.5
+## 3         2       21       82       62   144  72.0
+## 4         3       18       80       64   144  72.0
+## 5         3        4       77       65   142  71.0
+## 6         1       27       88       58   146  73.0
+## 7         2        8       82       75   157  78.5
+## 8         3        2       70       71   141  70.5
+## 9         2       10       83       62   145  72.5
+## 10        2       29       77       78   155  77.5</code></pre>
+<p>만약 새롭게 계산한 합계과 평균 값만을 따로 데이터를 만들고 싶은 경우에는 <code>transmute</code>를 사용하자.</p>
+<pre class="r"><code>transmute(mydata, 합계 = 중간고사 + 기말고사,
+                  평균 = 합계 / 2)</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##     합계  평균
+##    &lt;int&gt; &lt;dbl&gt;
+## 1    148  74.0
+## 2    149  74.5
+## 3    144  72.0
+## 4    144  72.0
+## 5    142  71.0
+## 6    146  73.0
+## 7    157  78.5
+## 8    141  70.5
+## 9    145  72.5
+## 10   155  77.5</code></pre>
+</div>
+<div id="summarize---" class="section level3">
+<h3>5. <code>summarize()</code>를 이용한 스마트 서머리</h3>
+<p>우리가 주어진 학생들 성적 데이터를 가지고 있는 선생님의 입장이라고 생각해본다면, 우리는 학생 전체의 성적 평균을 구하고 싶을 것이다. 이 경우 <code>summarized()</code> 함수를 이용하면 쉽게 구할 수 있다.</p>
+<pre class="r"><code>summarise(mydata, 중간_전체평균 = mean(중간고사), 기말_전체평균 = mean(기말고사))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   중간_전체평균 기말_전체평균
+##           &lt;dbl&gt;         &lt;dbl&gt;
+## 1          80.6          66.5</code></pre>
+<p>만약 반 별 전체 평균을 구하고 싶은 경우에는 어떻게 할까? 반별로 중간고사와 기말고사의 평균을 구해보도록 하자.</p>
+<pre class="r"><code>by_class &lt;- group_by(mydata, 소속학급)
+summarise(by_class, 중간_전체평균 = mean(중간고사), 기말_전체평균 = mean(기말고사))</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##   소속학급 중간_전체평균 기말_전체평균
+##      &lt;int&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+## 1        1            87         60.00
+## 2        2            81         69.25
+## 3        3            77         67.00</code></pre>
+<div id="pipe--" class="section level4">
+<h4>파이프(pipe)를 이용한 코딩</h4>
+<p><code>tidyverse</code>에는 파이프라는 <code>%&gt;%</code> 명령어가 존재하는데, 리눅스에서 유래한 명령어이다. 이 파이프를 이용하면 좀 더 읽기 쉬운 코드를 작성할 수 있다. 파이프는 파이프 <strong>왼쪽에서 계산된 결과 값</strong>을 파이프 <strong>오른쪽의 함수 제일 첫번째 입력값</strong>으로 넘겨주는 역할을 한다. 다음의 코드는 파이프를 이용한 1반 학생들의 데이터에 중간, 기말고사 성적의 평균 변수를 생성하는 코드이다.</p>
+<pre class="r"><code>filter(mydata, 소속학급 == 1) %&gt;% mutate(평균 = (중간고사 + 기말고사)/2)</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   소속학급 학생번호 중간고사 기말고사  평균
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;dbl&gt;
+## 1        1       29       86       62    74
+## 2        1       27       88       58    73</code></pre>
+<p>지금까지 배운 코드들을 이용하여 1반과 3반의 중간고사와 기말고사 성적의 평균을 기준으로 순차적으로 정리하여 뽑아보도록 하자.</p>
+<pre class="r"><code>filter(mydata, 소속학급  %in% c(1, 3)) %&gt;%
+  mutate(평균 = (중간고사 + 기말고사)/2) %&gt;% 
+  arrange(소속학급, desc(평균))</code></pre>
+<pre><code>## # A tibble: 6 × 5
+##   소속학급 학생번호 중간고사 기말고사  평균
+##      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;dbl&gt;
+## 1        1       29       86       62  74.0
+## 2        1       27       88       58  73.0
+## 3        3       14       81       68  74.5
+## 4        3       18       80       64  72.0
+## 5        3        4       77       65  71.0
+## 6        3        2       70       71  70.5</code></pre>
+</div>
+</div>
+<div id="." class="section level2">
+<h2>정리하며.</h2>
+<p>이제까지 우리는 <code>tidyverse</code>팩키지 중 하나인 <code>dplyr</code>의 주요 동사 5가지를 알아보았다. 이 다섯가지 동사와 파이프 그리고 R의 <code>base</code>팩키지에서 제공되는 여러 함수들의 조합만으로도 상당히 많은 일을 손쉽게 할 수 있을 것이라 생각한다. 추후 포스팅에서는 여러개의 서브 데이터 프레임이 존재 할 경우 이들의 관계를 이용하여 새로운 데이터 테이블을 만들어 내는 것에 대하여 포스팅 해보도록 하겠다.</p>
+</div>
+
+<p>Copyright &copy; 2017 Issac Lee. All rights reserved.</p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

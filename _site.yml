@@ -1,9 +1,9 @@
 name: "issac-website"
-# output_dir: "../ForUI"
+output_dir: "."
 navbar:
   title: "Anyone Can Learn Anything"
-  left:
-    - text: ""
+#  left:
+#    - text: ""
     
   right:
     - text: "About Me"
