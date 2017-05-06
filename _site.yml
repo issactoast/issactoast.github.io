@@ -1,0 +1,29 @@
+name: "issac-website"
+# output_dir: "../ForUI"
+navbar:
+  title: "Anyone Can Learn Anything"
+  left:
+    - text: ""
+    
+  right:
+    - text: "About Me"
+      href: about.html
+    - text: "Say Hello to Me"
+      menu:
+        - icon: fa-facebook
+          text: Facebook page
+          href: https://www.facebook.com/profile.php?id=100004926046045
+        - icon: fa-github
+          text: Github page
+          href: https://github.com/issactoast
+        - icon: fa-envelope
+          text: Mail to Me
+          href: mailto:sak-lee@uiowa.edu
+  
+output:
+  html_document:
+    theme: flatly
+    highlight: textmate
+    css: style.css
+    include:
+      after_body: footer.html
